@@ -1,0 +1,13 @@
+[Unit]
+Description=Dd Dataverse Authenticator Service
+
+[Service]
+ExecStart=/opt/dans.knaw.nl/dd-dataverse-authenticator/bin/dd-dataverse-authenticator server /etc/opt/dans.knaw.nl/dd-dataverse-authenticator/config.yml
+# Java returns 143 even if the SIGTERM was handled correctly.
+SuccessExitStatus=143
+
+User=dd-dataverse-authenticator
+Group=dd-dataverse-authenticator
+
+[Install]
+WantedBy=multi-user.target
