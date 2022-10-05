@@ -1,7 +1,7 @@
 dd-dataverse-authenticator
-===========
+==========================
 
-<!-- Remove this comment and extend the descriptions below -->
+Service that authenticates Dataverse users using account credentials
 
 
 SYNOPSIS
@@ -9,12 +9,13 @@ SYNOPSIS
 
     dd-dataverse-authenticator { server | check }
 
-
 DESCRIPTION
 -----------
 
-Service that authenticates Dataverse users using account credentials
-
+Service that authenticates Dataverse users by their account credentials. It is basically an extension of the Dataverse API. This service is
+to be configured to have direct read access to the Dataverse database. The interface is very simple: a `POST` request with basic authentication.
+If the user is successfully authenticated a `204 No Content` response is returned, if the authentication failed `403 Forbidden` and
+sending no credentials results in `401 Unauthorized` with the `WWW-Authenticate` header set to `Basic`.
 
 ARGUMENTS
 ---------
@@ -29,13 +30,14 @@ ARGUMENTS
 EXAMPLES
 --------
 
-<!-- Add examples of invoking this module from the command line or via HTTP other interfaces -->
-    
+```
+curl -v -u username:password -X POST http://localhost:20340/
+```
 
 INSTALLATION AND CONFIGURATION
 ------------------------------
 Currently this project is built as an RPM package for RHEL7/CentOS7 and later. The RPM will install the binaries to
-`/opt/dans.knaw.nl/dd-dataverse-authenticator` and the configuration files to `/etc/opt/dans.knaw.nl/dd-dataverse-authenticator`. 
+`/opt/dans.knaw.nl/dd-dataverse-authenticator` and the configuration files to `/etc/opt/dans.knaw.nl/dd-dataverse-authenticator`.
 
 For installation on systems that do no support RPM and/or systemd:
 
@@ -55,12 +57,12 @@ Prerequisites:
 * RPM
 
 Steps:
-    
+
     git clone https://github.com/DANS-KNAW/dd-dataverse-authenticator.git
     cd dd-dataverse-authenticator 
     mvn clean install
 
-If the `rpm` executable is found at `/usr/local/bin/rpm`, the build profile that includes the RPM 
+If the `rpm` executable is found at `/usr/local/bin/rpm`, the build profile that includes the RPM
 packaging will be activated. If `rpm` is available, but at a different path, then activate it by using
 Maven's `-P` switch: `mvn -Pprm install`.
 

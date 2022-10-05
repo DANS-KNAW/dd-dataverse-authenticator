@@ -6,12 +6,17 @@ server:
   adminContextPath: /
   applicationConnectors:
     - type: http
-      # Replace with port number unique for this service
-      port: 20000 # TODO: Replace with unique port number
+      port: 20340
   adminConnectors:
     - type: http
-      # Replace with port number unique for this service
-      port: 20001 # TODO: Replace with unique port number
+      port: 20341
+
+dataverseDatabase:
+  driverClass: org.postgresql.Driver
+  url: jdbc:postgresql://localhost:5432/dvndb
+  user: dd_dataverse_authenticator
+  password: changeme
+  logValidationErrors: true
 
 #
 # See https://www.dropwizard.io/en/latest/manual/configuration.html#logging
