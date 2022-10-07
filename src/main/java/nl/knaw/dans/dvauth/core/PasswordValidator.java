@@ -13,28 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package nl.knaw.dans.dvauth.core;
 
-package nl.knaw.dans.dvauth;
+public interface PasswordValidator {
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.dropwizard.Configuration;
-import io.dropwizard.db.DataSourceFactory;
+    boolean validatePassword(String plaintext, String hashed, PasswordAlgorithm algorithm);
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-public class DdDataverseAuthenticatorConfiguration extends Configuration {
-    @Valid
-    @NotNull
-    private DataSourceFactory database = new DataSourceFactory();
-
-    @JsonProperty("database")
-    public DataSourceFactory getDataSourceFactory() {
-        return database;
-    }
-
-    @JsonProperty("database")
-    public void setDataSourceFactory(DataSourceFactory factory) {
-        this.database = factory;
+    enum PasswordAlgorithm {
+        SHA,
+        BCRYPT
     }
 }

@@ -1,34 +1,30 @@
+
 server:
   applicationContextPath: /
   adminContextPath: /
   applicationConnectors:
     - type: http
       # Replace with port number unique for this service
-      port: 20000
+      port: 0
   adminConnectors:
     - type: http
       # Replace with port number unique for this service
-      port: 20001
+      port: 0
 
 database:
-  driverClass: org.postgresql.Driver
-  user: dd_dataverse_authenticator
-  password: changeme
-  url: jdbc:postgresql://localhost:5432/dvndb
-  logValidationErrors: true
+  driverClass: org.h2.Driver
+  user: root
+  password: root
+  url: jdbc:h2:mem:dataverse;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:test-etc/init.sql'
   properties:
     charSet: UTF-8
-  maxWaitForConnection: 1s
-  validationQuery: "/* dd-dataverse-authenticator Health Check */ SELECT 1"
-  validationQueryTimeout: 3s
+    hibernate.dialect: org.hibernate.dialect.H2Dialect
+    hibernate.hbm2ddl.auto: create-drop
+    hibernate.show_sql: false
+  maxWaitForConnection: 3s
+  validationQuery: SELECT 1
   minSize: 8
-  maxSize: 32
-  checkConnectionWhileIdle: true
-  checkConnectionOnConnect: true
-  checkConnectionOnReturn: true
-  checkConnectionOnBorrow: true
-  evictionInterval: 10s
-  minIdleTime: 1 minute
+  maxSize: 30
 
 #
 # See https://www.dropwizard.io/en/latest/manual/configuration.html#logging

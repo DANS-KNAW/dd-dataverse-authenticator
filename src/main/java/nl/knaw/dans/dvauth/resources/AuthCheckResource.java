@@ -13,28 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package nl.knaw.dans.dvauth.resources;
 
-package nl.knaw.dans.dvauth;
+import io.dropwizard.auth.Auth;
+import nl.knaw.dans.dvauth.auth.AuthUser;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.dropwizard.Configuration;
-import io.dropwizard.db.DataSourceFactory;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+@Path("/")
+public class AuthCheckResource {
 
-public class DdDataverseAuthenticatorConfiguration extends Configuration {
-    @Valid
-    @NotNull
-    private DataSourceFactory database = new DataSourceFactory();
-
-    @JsonProperty("database")
-    public DataSourceFactory getDataSourceFactory() {
-        return database;
-    }
-
-    @JsonProperty("database")
-    public void setDataSourceFactory(DataSourceFactory factory) {
-        this.database = factory;
+    @POST
+    public String checkAuth(@Auth AuthUser authUser) {
+        // returning null creates a 204 no content response, as the specs require
+        return null;
     }
 }

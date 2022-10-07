@@ -13,28 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package nl.knaw.dans.dvauth.db;
 
-package nl.knaw.dans.dvauth;
+import nl.knaw.dans.dvauth.core.BuiltinUser;
+import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
+import org.jdbi.v3.sqlobject.customizer.Bind;
+import org.jdbi.v3.sqlobject.statement.SqlQuery;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.dropwizard.Configuration;
-import io.dropwizard.db.DataSourceFactory;
+import java.util.Optional;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+public interface DataverseDao {
 
-public class DdDataverseAuthenticatorConfiguration extends Configuration {
-    @Valid
-    @NotNull
-    private DataSourceFactory database = new DataSourceFactory();
+    @SqlQuery("select id, encryptedpassword, passwordencryptionversion, username from builtinuser where username = :username limit 1")
+    @RegisterBeanMapper(BuiltinUser.class)
+    Optional<BuiltinUser> findUserByName(@Bind("username") String username);
 
-    @JsonProperty("database")
-    public DataSourceFactory getDataSourceFactory() {
-        return database;
-    }
-
-    @JsonProperty("database")
-    public void setDataSourceFactory(DataSourceFactory factory) {
-        this.database = factory;
-    }
 }

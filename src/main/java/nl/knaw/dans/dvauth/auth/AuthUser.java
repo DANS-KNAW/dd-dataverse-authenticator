@@ -13,28 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package nl.knaw.dans.dvauth.auth;
 
-package nl.knaw.dans.dvauth;
+import java.security.Principal;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.dropwizard.Configuration;
-import io.dropwizard.db.DataSourceFactory;
+public class AuthUser implements Principal {
+    private final String name;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-public class DdDataverseAuthenticatorConfiguration extends Configuration {
-    @Valid
-    @NotNull
-    private DataSourceFactory database = new DataSourceFactory();
-
-    @JsonProperty("database")
-    public DataSourceFactory getDataSourceFactory() {
-        return database;
+    public AuthUser(String name) {
+        this.name = name;
     }
 
-    @JsonProperty("database")
-    public void setDataSourceFactory(DataSourceFactory factory) {
-        this.database = factory;
+    @Override
+    public String getName() {
+        return this.name;
     }
 }
