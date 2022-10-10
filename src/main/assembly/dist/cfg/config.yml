@@ -11,7 +11,7 @@ server:
     - type: http
       port: 20341
 
-database:
+dataverseDatabase:
   driverClass: org.postgresql.Driver
   user: dd_dataverse_authenticator
   password: changeme

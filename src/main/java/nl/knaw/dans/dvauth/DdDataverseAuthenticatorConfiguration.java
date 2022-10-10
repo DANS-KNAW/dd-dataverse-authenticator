@@ -28,12 +28,12 @@ public class DdDataverseAuthenticatorConfiguration extends Configuration {
     @NotNull
     private DataSourceFactory database = new DataSourceFactory();
 
-    @JsonProperty("database")
+    @JsonProperty("dataverseDatabase")
     public DataSourceFactory getDataSourceFactory() {
         return database;
     }
 
-    @JsonProperty("database")
+    @JsonProperty("dataverseDatabase")
     public void setDataSourceFactory(DataSourceFactory factory) {
         this.database = factory;
     }

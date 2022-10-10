@@ -11,7 +11,7 @@ server:
       # Replace with port number unique for this service
       port: 0
 
-database:
+dataverseDatabase:
   driverClass: org.h2.Driver
   user: root
   password: root

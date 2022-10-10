@@ -10,7 +10,7 @@ server:
       # Replace with port number unique for this service
       port: 20001
 
-database:
+dataverseDatabase:
   driverClass: org.postgresql.Driver
   user: dd_dataverse_authenticator
   password: changeme
