@@ -82,8 +82,7 @@ docker run \
     -e POSTGRES_USER=dvnuser \
     -e POSTGRES_PASSWORD=password \
     -e POSTGRES_DB=dvndb \
-    -p 5432 \
-    --network host \
+    -p 5432:5432 \
     --mount "type=bind,src=$PWD/src/test/resources/test-etc/init.sql,dst=/docker-entrypoint-initdb.d/init.sql" \
     postgres:13.7
 ```
