@@ -17,8 +17,18 @@
 package nl.knaw.dans.dvauth;
 
 import io.dropwizard.Application;
+import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
+import io.dropwizard.jdbi3.JdbiFactory;
+import io.dropwizard.jdbi3.bundles.JdbiExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import nl.knaw.dans.dvauth.auth.AuthUser;
+import nl.knaw.dans.dvauth.auth.DataverseAuthenticator;
+import nl.knaw.dans.dvauth.core.PasswordValidatorImpl;
+import nl.knaw.dans.dvauth.db.DataverseDao;
+import nl.knaw.dans.dvauth.resources.AuthCheckResource;
 
 public class DdDataverseAuthenticatorApplication extends Application<DdDataverseAuthenticatorConfiguration> {
 
@@ -33,12 +43,25 @@ public class DdDataverseAuthenticatorApplication extends Application<DdDataverse
 
     @Override
     public void initialize(final Bootstrap<DdDataverseAuthenticatorConfiguration> bootstrap) {
-        // TODO: application initialization
+        bootstrap.addBundle(new JdbiExceptionsBundle());
     }
 
     @Override
     public void run(final DdDataverseAuthenticatorConfiguration configuration, final Environment environment) {
+        var factory = new JdbiFactory();
+        var jdbi = factory.build(environment, configuration.getDataSourceFactory(), "dataverse");
 
+        var dataverseDao = jdbi.onDemand(DataverseDao.class);
+        var passwordValidator = new PasswordValidatorImpl();
+
+        environment.jersey().register(new AuthDynamicFeature(
+            new BasicCredentialAuthFilter.Builder<AuthUser>()
+                .setAuthenticator(new DataverseAuthenticator(dataverseDao, passwordValidator))
+                .setRealm("Dataverse")
+                .buildAuthFilter()));
+
+        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(AuthUser.class));
+        environment.jersey().register(new AuthCheckResource());
     }
 
 }

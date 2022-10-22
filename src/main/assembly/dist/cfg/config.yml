@@ -13,10 +13,23 @@ server:
 
 dataverseDatabase:
   driverClass: org.postgresql.Driver
-  url: jdbc:postgresql://localhost:5432/dvndb
   user: dd_dataverse_authenticator
   password: changeme
+  url: jdbc:postgresql://localhost:5432/dvndb
   logValidationErrors: true
+  properties:
+    charSet: UTF-8
+  maxWaitForConnection: 1s
+  validationQuery: "/* dd-dataverse-authenticator Health Check */ SELECT 1"
+  validationQueryTimeout: 3s
+  minSize: 8
+  maxSize: 32
+  checkConnectionWhileIdle: true
+  checkConnectionOnConnect: true
+  checkConnectionOnReturn: true
+  checkConnectionOnBorrow: true
+  evictionInterval: 10s
+  minIdleTime: 1 minute
 
 #
 # See https://www.dropwizard.io/en/latest/manual/configuration.html#logging
@@ -28,3 +41,12 @@ logging:
       archive: false
       timeZone: system
       currentLogFilename: /var/opt/dans.knaw.nl/log/dd-dataverse-authenticator/dd-dataverse-authenticator.log
+
+health:
+  healthChecks:
+    - name: dataverse
+      critical: true
+      schedule:
+        checkInterval: 3s
+        failureAttempts: 2
+        successAttempts: 1

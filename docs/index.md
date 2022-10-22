@@ -69,3 +69,43 @@ Maven's `-P` switch: `mvn -Pprm install`.
 Alternatively, to build the tarball execute:
 
     mvn clean install assembly:single
+
+
+RUNNING POSTGRESQL LOCALLY
+--------------------------
+
+Make sure you have Docker installed. After that, run the following command in the root of the project (for example, `~/git/dd-dataverse-authenticator`):
+
+```shell
+docker run \
+    --rm -it \
+    -e POSTGRES_USER=dvnuser \
+    -e POSTGRES_PASSWORD=password \
+    -e POSTGRES_DB=dvndb \
+    -p 5432:5432 \
+    --mount "type=bind,src=$PWD/src/test/resources/test-etc/init.sql,dst=/docker-entrypoint-initdb.d/init.sql" \
+    postgres:13.7
+```
+
+Then update your `etc/config.yml` to have the following `dataverseDatabase` configuration:
+
+```yaml
+dataverseDatabase:
+   driverClass: org.postgresql.Driver
+   user: dvnuser
+   password: password
+   url: jdbc:postgresql://localhost:5432/dvndb
+   properties:
+      charSet: UTF-8
+   maxWaitForConnection: 1s
+   validationQuery: "/* dd-dataverse-authenticator Health Check */ SELECT 1"
+   validationQueryTimeout: 3s
+   minSize: 8
+   maxSize: 32
+   checkConnectionWhileIdle: true
+   checkConnectionOnConnect: true
+   checkConnectionOnReturn: true
+   checkConnectionOnBorrow: true
+   evictionInterval: 10s
+   minIdleTime: 1 minute
+```
