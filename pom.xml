@@ -40,7 +40,7 @@
     </properties>
 
     <scm>
-        <developerConnection>scm:git:https://github.com/DANS-KNAW/dd-dataverse-authenticator</developerConnection>
+        <developerConnection>scm:git:ssh://github.com/DANS-KNAW/dd-dataverse-authenticator</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
