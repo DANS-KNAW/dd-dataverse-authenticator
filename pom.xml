@@ -27,7 +27,7 @@
 
     <groupId>nl.knaw.dans</groupId>
     <artifactId>dd-dataverse-authenticator</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.2.0</version>
 
     <name>Dd Dataverse Authenticator</name>
     <url>https://github.com/DANS-KNAW/dd-dataverse-authenticator</url>
@@ -40,7 +40,7 @@
 
     <scm>
         <developerConnection>scm:git:ssh://github.com/DANS-KNAW/dd-dataverse-authenticator</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v0.2.0</tag>
     </scm>
 
     <dependencies>
