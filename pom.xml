@@ -22,13 +22,13 @@
     <parent>
         <groupId>nl.knaw.dans</groupId>
         <artifactId>dd-parent</artifactId>
-        <version>0.11.0</version>
+        <version>0.12.0</version>
     </parent>
 
     <artifactId>dd-dataverse-authenticator</artifactId>
     <version>0.3.1-SNAPSHOT</version>
 
-    <name>Dd Dataverse Authenticator</name>
+    <name>DD Dataverse Authenticator</name>
     <url>https://github.com/DANS-KNAW/dd-dataverse-authenticator</url>
     <description>Service that authenticates Dataverse users using account credentials</description>
     <inceptionYear>2022</inceptionYear>
