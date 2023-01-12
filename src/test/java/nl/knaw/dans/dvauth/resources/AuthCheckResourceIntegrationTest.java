@@ -57,7 +57,6 @@ class AuthCheckResourceIntegrationTest {
             .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
 
             assertEquals(204, result.getStatus());
-
         }
     }
 

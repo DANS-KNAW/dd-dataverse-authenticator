@@ -10,6 +10,8 @@ server:
     - type: http
       # Replace with port number unique for this service
       port: 0
+  requestLog:
+    appenders: [ ]
 
 dataverseDatabase:
   driverClass: org.h2.Driver
