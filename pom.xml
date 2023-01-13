@@ -96,6 +96,15 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>nl.knaw.dans</groupId>
+            <artifactId>dans-java-utils</artifactId>
+            <version>0.5.0</version>
+            <!-- Only used during unit test in this project -->
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <repositories>
