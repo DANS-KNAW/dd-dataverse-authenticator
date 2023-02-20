@@ -26,13 +26,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
-public class DataverseAuthenticator implements Authenticator<BasicCredentials, AuthUser> {
-    private static final Logger log = LoggerFactory.getLogger(DataverseAuthenticator.class);
+public class DataverseBasicAuthenticator implements Authenticator<BasicCredentials, AuthUser> {
+    private static final Logger log = LoggerFactory.getLogger(DataverseBasicAuthenticator.class);
 
     private final DataverseDao dataverseDao;
     private final PasswordValidator passwordValidator;
 
-    public DataverseAuthenticator(DataverseDao dataverseDao, PasswordValidator passwordValidator) {
+    public DataverseBasicAuthenticator(DataverseDao dataverseDao, PasswordValidator passwordValidator) {
         this.dataverseDao = dataverseDao;
         this.passwordValidator = passwordValidator;
     }

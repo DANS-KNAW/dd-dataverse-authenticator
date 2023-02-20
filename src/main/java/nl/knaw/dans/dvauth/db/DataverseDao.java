@@ -16,6 +16,7 @@
 package nl.knaw.dans.dvauth.db;
 
 import nl.knaw.dans.dvauth.core.BuiltinUser;
+import nl.knaw.dans.dvauth.core.TokenUser;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
@@ -28,4 +29,8 @@ public interface DataverseDao {
     @RegisterBeanMapper(BuiltinUser.class)
     Optional<BuiltinUser> findUserByName(@Bind("username") String username);
 
+    @SqlQuery("select a.useridentifier as username from apitoken t join authenticateduser a on a.id = t.authenticateduser_id "
+        + "where a.deactivated = false and t.disabled = false and t.tokenstring = :token")
+    @RegisterBeanMapper(TokenUser.class)
+    Optional<TokenUser> findUserByApiToken(@Bind("token") String token);
 }
