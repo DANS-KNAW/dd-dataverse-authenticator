@@ -20,6 +20,7 @@ import io.dropwizard.auth.basic.BasicCredentials;
 
 import javax.annotation.Nullable;
 import javax.annotation.Priority;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.HttpHeaders;
@@ -28,10 +29,15 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.Base64;
+import java.util.HashSet;
+import java.util.Objects;
 
 @Priority(Priorities.AUTHENTICATION)
 public class CombinedAuthenticationFilter<P extends Principal> extends AuthFilter<CombinedCredentials, P> {
-    private final String headerName;
+    private String headerName;
+
+    public CombinedAuthenticationFilter() {
+    }
 
     public CombinedAuthenticationFilter(String headerName) {
         this.headerName = headerName;
@@ -40,6 +46,11 @@ public class CombinedAuthenticationFilter<P extends Principal> extends AuthFilte
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         var principals = getPrincipals(requestContext);
+
+        // only allow a single authentication method
+        if (countMethods(principals) > 1) {
+            throw new BadRequestException("Only one of X-Dataverse-Key and Basic Authentication allowed per request");
+        }
 
         // not sure what will break if we put our custom auth method in here, so lets stick with BASIC_AUTH
         if (!authenticate(requestContext, principals, SecurityContext.BASIC_AUTH)) {
@@ -52,7 +63,7 @@ public class CombinedAuthenticationFilter<P extends Principal> extends AuthFilte
         var value = requestContext.getHeaders().getFirst(headerName);
 
         if (value != null) {
-            result.setHeaderValue(new HeaderCredentials(value));
+            result.setHeaderCredentials(new HeaderCredentials(value));
         }
 
         var basicCredentials = getBasicCredentials(requestContext.getHeaders().getFirst(HttpHeaders.AUTHORIZATION));
@@ -99,6 +110,14 @@ public class CombinedAuthenticationFilter<P extends Principal> extends AuthFilte
         final String username = decoded.substring(0, i);
         final String password = decoded.substring(i + 1);
         return new BasicCredentials(username, password);
+    }
+
+    private long countMethods(CombinedCredentials credentials) {
+        var counter = new HashSet<>();
+        counter.add(credentials.getHeaderCredentials());
+        counter.add(credentials.getBasicCredentials());
+
+        return counter.stream().filter(Objects::nonNull).count();
     }
 
     public static class Builder<P extends Principal> extends

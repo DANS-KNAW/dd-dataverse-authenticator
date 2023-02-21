@@ -38,11 +38,11 @@ public class CombinedCredentials {
         this.basicCredentials = basicCredentials;
     }
 
-    public HeaderCredentials getHeaderValue() {
+    public HeaderCredentials getHeaderCredentials() {
         return headerCredentials;
     }
 
-    public void setHeaderValue(HeaderCredentials headerCredentials) {
+    public void setHeaderCredentials(HeaderCredentials headerCredentials) {
         this.headerCredentials = headerCredentials;
     }
 }

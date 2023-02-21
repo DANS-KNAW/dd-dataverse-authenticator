@@ -62,7 +62,7 @@ public class DdDataverseAuthenticatorApplication extends Application<DdDataverse
         //                .setRealm("Dataverse")
         //                .buildAuthFilter()));
 
-        var dataverseTokenAuthenticator = new DataverseTokenAuthenticator(dataverseDao, passwordValidator);
+        var dataverseTokenAuthenticator = new DataverseTokenAuthenticator(dataverseDao);
         var dataverseBasicAuthenticator = new DataverseBasicAuthenticator(dataverseDao, passwordValidator);
 
         environment.jersey().register(new AuthDynamicFeature(

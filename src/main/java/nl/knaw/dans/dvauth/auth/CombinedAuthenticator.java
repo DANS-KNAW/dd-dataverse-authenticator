@@ -18,7 +18,10 @@ package nl.knaw.dans.dvauth.auth;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
 
+import javax.ws.rs.BadRequestException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 
 public class CombinedAuthenticator implements Authenticator<CombinedCredentials, AuthUser> {
@@ -32,6 +35,7 @@ public class CombinedAuthenticator implements Authenticator<CombinedCredentials,
 
     @Override
     public Optional<AuthUser> authenticate(CombinedCredentials credentials) throws AuthenticationException {
+
         var results = new ArrayList<Optional<AuthUser>>();
 
         // Only check the credentials if they are provided. If provided, they must all be correct
@@ -40,8 +44,8 @@ public class CombinedAuthenticator implements Authenticator<CombinedCredentials,
             results.add(basicResult);
         }
 
-        if (credentials.getHeaderValue() != null) {
-            var headerResult = dataverseTokenAuthenticator.authenticate(credentials.getHeaderValue());
+        if (credentials.getHeaderCredentials() != null) {
+            var headerResult = dataverseTokenAuthenticator.authenticate(credentials.getHeaderCredentials());
             results.add(headerResult);
         }
 
@@ -51,12 +55,12 @@ public class CombinedAuthenticator implements Authenticator<CombinedCredentials,
         }
 
         // one of the results is not correct
-        if (results.contains(Optional.<AuthUser>empty())) {
+        if (results.contains(Optional.<AuthUser> empty())) {
             return Optional.empty();
         }
 
-        // TODO what if both methods are provided, but result in different users?
         // the first result will be returned
         return results.get(0);
     }
+
 }

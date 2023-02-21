@@ -149,23 +149,7 @@ class AuthCheckResourceIntegrationTest {
     }
 
     @Test
-    void authenticate_should_return_401_for_valid_basic_auth_but_incorrect_header_key() {
-        var url = String.format("http://localhost:%s/", EXT.getLocalPort());
-        var auth = generateBasicAuthHeader("user001", "user001");
-
-        try (var result = EXT.client()
-            .target(url)
-            .request()
-            .header("authorization", auth)
-            .header("x-dataverse-key", "does-not-exist")
-            .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
-
-            assertEquals(401, result.getStatus());
-        }
-    }
-
-    @Test
-    void authenticate_should_return_401_for_invalid_basic_auth_but_correct_header_key() {
+    void authenticate_should_return_400_if_two_auth_methods_are_used() {
         var url = String.format("http://localhost:%s/", EXT.getLocalPort());
         var auth = generateBasicAuthHeader("user001", "user002");
 
@@ -176,23 +160,7 @@ class AuthCheckResourceIntegrationTest {
             .header("x-dataverse-key", "token1")
             .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
 
-            assertEquals(401, result.getStatus());
-        }
-    }
-
-    @Test
-    void authenticate_should_return_204_for_valid_basic_auth_and_header_key() {
-        var url = String.format("http://localhost:%s/", EXT.getLocalPort());
-        var auth = generateBasicAuthHeader("user001", "user001");
-
-        try (var result = EXT.client()
-            .target(url)
-            .request()
-            .header("authorization", auth)
-            .header("x-dataverse-key", "token1")
-            .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
-
-            assertEquals(204, result.getStatus());
+            assertEquals(400, result.getStatus());
         }
     }
 }

@@ -17,6 +17,7 @@ package nl.knaw.dans.dvauth.auth;
 
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
+import io.dropwizard.auth.chained.ChainedAuthFilter;
 import nl.knaw.dans.dvauth.core.PasswordValidator;
 import nl.knaw.dans.dvauth.db.DataverseDao;
 import org.slf4j.Logger;
@@ -28,11 +29,9 @@ public class DataverseTokenAuthenticator implements Authenticator<HeaderCredenti
     private static final Logger log = LoggerFactory.getLogger(DataverseTokenAuthenticator.class);
 
     private final DataverseDao dataverseDao;
-    private final PasswordValidator passwordValidator;
 
-    public DataverseTokenAuthenticator(DataverseDao dataverseDao, PasswordValidator passwordValidator) {
+    public DataverseTokenAuthenticator(DataverseDao dataverseDao) {
         this.dataverseDao = dataverseDao;
-        this.passwordValidator = passwordValidator;
     }
 
     @Override
