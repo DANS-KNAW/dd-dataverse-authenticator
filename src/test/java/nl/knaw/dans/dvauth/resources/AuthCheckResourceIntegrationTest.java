@@ -46,7 +46,7 @@ class AuthCheckResourceIntegrationTest {
     }
 
     @Test
-    void testWithUsername() {
+    void authenticate_should_return_204_with_valid_credentials() {
         var url = String.format("http://localhost:%s/", EXT.getLocalPort());
         var auth = generateBasicAuthHeader("user001", "user001");
 
@@ -61,7 +61,7 @@ class AuthCheckResourceIntegrationTest {
     }
 
     @Test
-    void testWithUsernameButWrongPassword() {
+    void authenticate_should_return_401_for_invalid_password() {
         var url = String.format("http://localhost:%s/", EXT.getLocalPort());
         var auth = generateBasicAuthHeader("user001", "user002");
 
@@ -77,7 +77,7 @@ class AuthCheckResourceIntegrationTest {
     }
 
     @Test
-    void testWithUsernameButWrongUsername() {
+    void authenticate_should_return_401_for_invalid_username() {
         var url = String.format("http://localhost:%s/", EXT.getLocalPort());
         var auth = generateBasicAuthHeader("non-existing", "user002");
 
@@ -93,7 +93,7 @@ class AuthCheckResourceIntegrationTest {
     }
 
     @Test
-    void testWithoutCredentials() {
+    void authenticate_should_return_401_for_missing_credentials() {
         var url = String.format("http://localhost:%s/", EXT.getLocalPort());
 
         try (var result = EXT.client()
@@ -103,6 +103,64 @@ class AuthCheckResourceIntegrationTest {
 
             assertEquals(401, result.getStatus());
             assertNotNull(result.getHeaderString("WWW-Authenticate"));
+        }
+    }
+
+    @Test
+    void authenticate_should_return_204_for_dataverse_key() {
+        var url = String.format("http://localhost:%s/", EXT.getLocalPort());
+
+        try (var result = EXT.client()
+            .target(url)
+            .request()
+            .header("x-dataverse-key", "token1")
+            .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
+
+            assertEquals(204, result.getStatus());
+        }
+    }
+
+    @Test
+    void authenticate_should_return_401_for_invalid_dataverse_key() {
+        var url = String.format("http://localhost:%s/", EXT.getLocalPort());
+
+        try (var result = EXT.client()
+            .target(url)
+            .request()
+            .header("x-dataverse-key", "token2")
+            .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
+
+            assertEquals(401, result.getStatus());
+        }
+    }
+
+    @Test
+    void authenticate_should_return_401_for_missing_key() {
+        var url = String.format("http://localhost:%s/", EXT.getLocalPort());
+
+        try (var result = EXT.client()
+            .target(url)
+            .request()
+            .header("x-dataverse-key", "does-not-exist")
+            .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
+
+            assertEquals(401, result.getStatus());
+        }
+    }
+
+    @Test
+    void authenticate_should_return_400_if_two_auth_methods_are_used() {
+        var url = String.format("http://localhost:%s/", EXT.getLocalPort());
+        var auth = generateBasicAuthHeader("user001", "user002");
+
+        try (var result = EXT.client()
+            .target(url)
+            .request()
+            .header("authorization", auth)
+            .header("x-dataverse-key", "token1")
+            .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
+
+            assertEquals(400, result.getStatus());
         }
     }
 }

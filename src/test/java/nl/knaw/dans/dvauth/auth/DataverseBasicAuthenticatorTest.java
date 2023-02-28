@@ -29,14 +29,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class DataverseAuthenticatorTest {
+class DataverseBasicAuthenticatorTest {
 
     final DataverseDao dataverseDao = Mockito.mock(DataverseDao.class);
     final PasswordValidator passwordValidator = Mockito.mock(PasswordValidator.class);
 
     @Test
-    void authenticate() throws AuthenticationException {
-        var authenticator = new DataverseAuthenticator(dataverseDao, passwordValidator);
+    void authenticate_should_return_empty_optional_by_default() throws AuthenticationException {
+        var authenticator = new DataverseBasicAuthenticator(dataverseDao, passwordValidator);
         var credentials = new BasicCredentials("user", "pass");
         var result = authenticator.authenticate(credentials);
 
@@ -44,8 +44,8 @@ class DataverseAuthenticatorTest {
     }
 
     @Test
-    void authenticateSuccess() throws AuthenticationException {
-        var authenticator = new DataverseAuthenticator(dataverseDao, passwordValidator);
+    void authenticate_should_return_AuthUser_if_user_is_found_in_db() throws AuthenticationException {
+        var authenticator = new DataverseBasicAuthenticator(dataverseDao, passwordValidator);
         var credentials = new BasicCredentials("user", "pass");
 
         Mockito.when(dataverseDao.findUserByName(Mockito.anyString()))
@@ -60,8 +60,8 @@ class DataverseAuthenticatorTest {
     }
 
     @Test
-    void authenticateFailedUserNotFound() throws AuthenticationException {
-        var authenticator = new DataverseAuthenticator(dataverseDao, passwordValidator);
+    void authenticate_should_return_empty_optional_if_user_is_not_in_db() throws AuthenticationException {
+        var authenticator = new DataverseBasicAuthenticator(dataverseDao, passwordValidator);
         var credentials = new BasicCredentials("user", "pass");
 
         Mockito.when(dataverseDao.findUserByName(Mockito.anyString()))
@@ -76,8 +76,8 @@ class DataverseAuthenticatorTest {
     }
 
     @Test
-    void authenticateFailedPasswordWrong() throws AuthenticationException {
-        var authenticator = new DataverseAuthenticator(dataverseDao, passwordValidator);
+    void authenticate_should_return_empty_optional_if_password_does_not_match() throws AuthenticationException {
+        var authenticator = new DataverseBasicAuthenticator(dataverseDao, passwordValidator);
         var credentials = new BasicCredentials("user", "pass");
 
         Mockito.when(dataverseDao.findUserByName(Mockito.anyString()))
@@ -92,8 +92,8 @@ class DataverseAuthenticatorTest {
     }
 
     @Test
-    void authenticateThrowsException() {
-        var authenticator = new DataverseAuthenticator(dataverseDao, passwordValidator);
+    void authenticate_should_throw_AuthenticationException_if_something_else_throws() {
+        var authenticator = new DataverseBasicAuthenticator(dataverseDao, passwordValidator);
         var credentials = new BasicCredentials("user", "pass");
 
         Mockito.when(dataverseDao.findUserByName(Mockito.anyString()))
