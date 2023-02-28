@@ -55,13 +55,6 @@ public class DdDataverseAuthenticatorApplication extends Application<DdDataverse
 
         var dataverseDao = jdbi.onDemand(DataverseDao.class);
         var passwordValidator = new PasswordValidatorImpl();
-
-        //        environment.jersey().register(new AuthDynamicFeature(
-        //            new BasicCredentialAuthFilter.Builder<AuthUser>()
-        //                .setAuthenticator(new DataverseBasicAuthenticator(dataverseDao, passwordValidator))
-        //                .setRealm("Dataverse")
-        //                .buildAuthFilter()));
-
         var dataverseTokenAuthenticator = new DataverseTokenAuthenticator(dataverseDao);
         var dataverseBasicAuthenticator = new DataverseBasicAuthenticator(dataverseDao, passwordValidator);
 
