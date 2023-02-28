@@ -13,9 +13,17 @@ DESCRIPTION
 -----------
 
 Service that authenticates Dataverse users by their account credentials. It is basically an extension of the Dataverse API. This service is
-to be configured to have direct read access to the Dataverse database. The interface is very simple: a `POST` request with basic authentication.
+to be configured to have direct read access to the Dataverse database. It is recommended to use a dedicated PostGreSQL user for this with only
+SELECT permissions on the tables: `builtinuser`, `apitoken` and `authenticateduser`.
+
+The interface is very simple: a `POST` request with either:
+
+* basic authentication with the user's username and password, OR
+* an X-Dataverse-key with the user's API token
+
 If the user is successfully authenticated a `204 No Content` response is returned, if the authentication failed `403 Forbidden` and
-sending no credentials results in `401 Unauthorized` with the `WWW-Authenticate` header set to `Basic`.
+sending no credentials results in `401 Unauthorized` with the `WWW-Authenticate` header set to `Basic`. If both the basic auth and the API-token
+are sent a `400 Bad Request` is returned and the credentials are **not** verified.
 
 ARGUMENTS
 ---------
@@ -32,11 +40,12 @@ EXAMPLES
 
 ```
 curl -v -u username:password -X POST http://localhost:20340/
+curl -v -H 'X-Dataverse-key: 0571dee0-5e48-4439-aeef-94fd3dc380d1' -X POST http://localhost:20340/
 ```
 
 INSTALLATION AND CONFIGURATION
 ------------------------------
-Currently this project is built as an RPM package for RHEL7/CentOS7 and later. The RPM will install the binaries to
+Currently, this project is built as an RPM package for RHEL7/CentOS7 and later. The RPM will install the binaries to
 `/opt/dans.knaw.nl/dd-dataverse-authenticator` and the configuration files to `/etc/opt/dans.knaw.nl/dd-dataverse-authenticator`.
 
 For installation on systems that do no support RPM and/or systemd:
@@ -69,43 +78,3 @@ Maven's `-P` switch: `mvn -Pprm install`.
 Alternatively, to build the tarball execute:
 
     mvn clean install assembly:single
-
-
-RUNNING POSTGRESQL LOCALLY
---------------------------
-
-Make sure you have Docker installed. After that, run the following command in the root of the project (for example, `~/git/dd-dataverse-authenticator`):
-
-```shell
-docker run \
-    --rm -it \
-    -e POSTGRES_USER=dvnuser \
-    -e POSTGRES_PASSWORD=password \
-    -e POSTGRES_DB=dvndb \
-    -p 5432:5432 \
-    --mount "type=bind,src=$PWD/src/test/resources/test-etc/init.sql,dst=/docker-entrypoint-initdb.d/init.sql" \
-    postgres:13.7
-```
-
-Then update your `etc/config.yml` to have the following `dataverseDatabase` configuration:
-
-```yaml
-dataverseDatabase:
-   driverClass: org.postgresql.Driver
-   user: dvnuser
-   password: password
-   url: jdbc:postgresql://localhost:5432/dvndb
-   properties:
-      charSet: UTF-8
-   maxWaitForConnection: 1s
-   validationQuery: "/* dd-dataverse-authenticator Health Check */ SELECT 1"
-   validationQueryTimeout: 3s
-   minSize: 8
-   maxSize: 32
-   checkConnectionWhileIdle: true
-   checkConnectionOnConnect: true
-   checkConnectionOnReturn: true
-   checkConnectionOnBorrow: true
-   evictionInterval: 10s
-   minIdleTime: 1 minute
-```
