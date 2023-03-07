@@ -35,7 +35,6 @@ public class CombinedAuthenticator implements Authenticator<CombinedCredentials,
 
     @Override
     public Optional<AuthUser> authenticate(CombinedCredentials credentials) throws AuthenticationException {
-
         var results = new ArrayList<Optional<AuthUser>>();
 
         // Only check the credentials if they are provided. If provided, they must all be correct
