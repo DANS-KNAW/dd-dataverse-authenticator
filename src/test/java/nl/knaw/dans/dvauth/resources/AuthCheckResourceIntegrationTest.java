@@ -20,6 +20,7 @@ import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import nl.knaw.dans.dvauth.DdDataverseAuthenticatorApplication;
 import nl.knaw.dans.dvauth.DdDataverseAuthenticatorConfiguration;
+import nl.knaw.dans.dvauth.api.UserAuthResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -57,6 +58,9 @@ class AuthCheckResourceIntegrationTest {
             .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
 
             assertEquals(200, result.getStatus());
+
+            var response = result.readEntity(UserAuthResponse.class);
+            assertEquals("user001", response.getUserId());
         }
     }
 
@@ -117,6 +121,8 @@ class AuthCheckResourceIntegrationTest {
             .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
 
             assertEquals(200, result.getStatus());
+            var response = result.readEntity(UserAuthResponse.class);
+            assertEquals("user001", response.getUserId());
         }
     }
 
