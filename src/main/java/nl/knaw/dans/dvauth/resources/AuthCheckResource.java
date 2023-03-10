@@ -28,7 +28,7 @@ import javax.ws.rs.core.MediaType;
 public class AuthCheckResource {
 
     @POST
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces(MediaType.APPLICATION_JSON)
     public UserAuthResponse checkAuth(@Auth AuthUser authUser) {
         return new UserAuthResponse(authUser.getName());
     }
