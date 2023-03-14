@@ -20,6 +20,7 @@ import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import nl.knaw.dans.dvauth.DdDataverseAuthenticatorApplication;
 import nl.knaw.dans.dvauth.DdDataverseAuthenticatorConfiguration;
+import nl.knaw.dans.dvauth.api.UserAuthResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -46,7 +47,7 @@ class AuthCheckResourceIntegrationTest {
     }
 
     @Test
-    void authenticate_should_return_204_with_valid_credentials() {
+    void authenticate_should_return_200_with_valid_credentials() {
         var url = String.format("http://localhost:%s/", EXT.getLocalPort());
         var auth = generateBasicAuthHeader("user001", "user001");
 
@@ -56,7 +57,10 @@ class AuthCheckResourceIntegrationTest {
             .header("authorization", auth)
             .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
 
-            assertEquals(204, result.getStatus());
+            assertEquals(200, result.getStatus());
+
+            var response = result.readEntity(UserAuthResponse.class);
+            assertEquals("user001", response.getUserId());
         }
     }
 
@@ -107,7 +111,7 @@ class AuthCheckResourceIntegrationTest {
     }
 
     @Test
-    void authenticate_should_return_204_for_dataverse_key() {
+    void authenticate_should_return_200_for_dataverse_key() {
         var url = String.format("http://localhost:%s/", EXT.getLocalPort());
 
         try (var result = EXT.client()
@@ -116,7 +120,9 @@ class AuthCheckResourceIntegrationTest {
             .header("x-dataverse-key", "token1")
             .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
 
-            assertEquals(204, result.getStatus());
+            assertEquals(200, result.getStatus());
+            var response = result.readEntity(UserAuthResponse.class);
+            assertEquals("user001", response.getUserId());
         }
     }
 

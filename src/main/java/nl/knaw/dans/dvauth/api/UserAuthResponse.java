@@ -13,24 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.knaw.dans.dvauth.resources;
+package nl.knaw.dans.dvauth.api;
 
-import io.dropwizard.auth.Auth;
-import nl.knaw.dans.dvauth.api.UserAuthResponse;
-import nl.knaw.dans.dvauth.auth.AuthUser;
+public class UserAuthResponse {
+    private String userId;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-@Path("/")
-public class AuthCheckResource {
-
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    public UserAuthResponse checkAuth(@Auth AuthUser authUser) {
-        return new UserAuthResponse(authUser.getName());
+    public UserAuthResponse() {
     }
 
+    public UserAuthResponse(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }
