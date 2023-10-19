@@ -12,18 +12,27 @@ SYNOPSIS
 DESCRIPTION
 -----------
 
-Service that authenticates Dataverse users by their account credentials. It is basically an extension of the Dataverse API. This service is
-to be configured to have direct read access to the Dataverse database. It is recommended to use a dedicated PostGreSQL user for this with only
-SELECT permissions on the tables: `builtinuser`, `apitoken` and `authenticateduser`.
+Service that authenticates Dataverse users by their account credentials. It is basically an extension of the Dataverse API. This
+service is to be configured to have direct read access to the Dataverse database. It is recommended to use a dedicated PostGreSQL
+user for this with only `SELECT` permissions on the tables: `builtinuser`, `apitoken` and `authenticateduser`.
 
 The interface is very simple: a `POST` request with either:
 
 * basic authentication with the user's username and password, OR
-* an X-Dataverse-key with the user's API token
+* an `X-Dataverse-key with` the user's API token
 
-If the user is successfully authenticated a `204 No Content` response is returned, if the authentication failed `403 Forbidden` and
-sending no credentials results in `401 Unauthorized` with the `WWW-Authenticate` header set to `Basic`. If both the basic auth and the API-token
-are sent a `400 Bad Request` is returned and the credentials are **not** verified.
+If the user is successfully authenticated a `200 OK` response is returned with a message body containing the authenticated user
+ID in a simple json doc:
+
+```json
+{
+  "userId": "user001"
+}
+```
+
+If the credentials were absent or incorrect `401 Unauthorized` is returned. 
+
+If both the basic auth and the API-token are sent a `400 Bad Request` is returned and the credentials are **not** verified.
 
 ARGUMENTS
 ---------
