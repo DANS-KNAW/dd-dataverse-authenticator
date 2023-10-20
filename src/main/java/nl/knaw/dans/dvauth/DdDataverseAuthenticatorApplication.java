@@ -16,18 +16,18 @@
 
 package nl.knaw.dans.dvauth;
 
-import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.jdbi3.bundles.JdbiExceptionsBundle;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
 import nl.knaw.dans.dvauth.auth.AuthUser;
+import nl.knaw.dans.dvauth.auth.CombinedAuthenticationFilter;
 import nl.knaw.dans.dvauth.auth.CombinedAuthenticator;
 import nl.knaw.dans.dvauth.auth.DataverseBasicAuthenticator;
 import nl.knaw.dans.dvauth.auth.DataverseTokenAuthenticator;
-import nl.knaw.dans.dvauth.auth.CombinedAuthenticationFilter;
 import nl.knaw.dans.dvauth.core.PasswordValidatorImpl;
 import nl.knaw.dans.dvauth.db.DataverseDao;
 import nl.knaw.dans.dvauth.resources.AuthCheckResource;
