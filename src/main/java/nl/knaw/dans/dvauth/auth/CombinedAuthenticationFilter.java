@@ -18,7 +18,7 @@ package nl.knaw.dans.dvauth.auth;
 import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.basic.BasicCredentials;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.annotation.Priority;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Priorities;
