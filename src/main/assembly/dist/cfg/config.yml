@@ -41,6 +41,8 @@ logging:
       archive: false
       timeZone: system
       currentLogFilename: /var/opt/dans.knaw.nl/log/dd-dataverse-authenticator/dd-dataverse-authenticator.log
+  loggers:
+    'org.hibernate.engine.internal.StatisticalLoggingSessionEventListener': 'OFF'
 
 health:
   healthChecks:
