@@ -5,7 +5,7 @@ Description=Dd Dataverse Authenticator Service
 ExecStart=/opt/dans.knaw.nl/dd-dataverse-authenticator/bin/dd-dataverse-authenticator server /etc/opt/dans.knaw.nl/dd-dataverse-authenticator/config.yml
 # Java returns 143 even if the SIGTERM was handled correctly.
 SuccessExitStatus=143
-Environment="INITIAL_HEAP_SIZE=-Xms64m"
+Environment="JAVA_OPTS=-Xms64m"
 Environment="LC_ALL=en_US.UTF-8"
 
 User=dd-dataverse-authenticator
