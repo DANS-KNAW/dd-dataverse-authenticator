@@ -30,7 +30,7 @@ public interface DataverseDao {
     Optional<BuiltinUser> findUserByName(@Bind("username") String username);
 
     @SqlQuery("select a.useridentifier as username from apitoken t join authenticateduser a on a.id = t.authenticateduser_id "
-        + "where a.deactivated = false and t.disabled = false and t.tokenstring = :token")
+        + "where a.deactivated = false and t.disabled = false and t.expiretime > CURRENT_DATE and t.tokenstring = :token")
     @RegisterBeanMapper(TokenUser.class)
     Optional<TokenUser> findUserByApiToken(@Bind("token") String token);
 }
