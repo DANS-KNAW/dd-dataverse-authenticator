@@ -136,8 +136,23 @@ class AuthCheckResourceIntegrationTest {
             .header("x-dataverse-key", "token5")
             .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
 
-            // TODO fix this test
+            assertEquals(401, result.getStatus());
+        }
+    }
+
+    @Test
+    void authenticate_should_return_200_despite_expired_token() {
+        var url = String.format("http://localhost:%s/", EXT.getLocalPort());
+        var auth = generateBasicAuthHeader("user005", "user005");
+
+        try (var result = EXT.client()
+            .target(url)
+            .request()
+            .header("authorization", auth)
+            .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
+
             assertEquals(200, result.getStatus());
+
             var response = result.readEntity(UserAuthResponse.class);
             assertEquals("user005", response.getUserId());
         }
