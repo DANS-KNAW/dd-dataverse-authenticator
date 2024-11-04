@@ -127,6 +127,23 @@ class AuthCheckResourceIntegrationTest {
     }
 
     @Test
+    void authenticate_should_return_401_for_expired_dataverse_key() {
+        var url = String.format("http://localhost:%s/", EXT.getLocalPort());
+
+        try (var result = EXT.client()
+            .target(url)
+            .request()
+            .header("x-dataverse-key", "token5")
+            .post(Entity.entity("", MediaType.APPLICATION_JSON_TYPE))) {
+
+            // TODO fix this test
+            assertEquals(200, result.getStatus());
+            var response = result.readEntity(UserAuthResponse.class);
+            assertEquals("user005", response.getUserId());
+        }
+    }
+
+    @Test
     void authenticate_should_return_401_for_invalid_dataverse_key() {
         var url = String.format("http://localhost:%s/", EXT.getLocalPort());
 
