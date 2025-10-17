@@ -6,7 +6,7 @@ Service that authenticates Dataverse users using account credentials
 Purpose
 -------
 
-Provide a way for a front-end service (such as [dd-sword2](https://dans-knaw.github.io/dans-datastation-architecture/#dd-sword2){:target=_blank}) to
+Provide a way for a front-end service (such as [dd-sword2](https://dans-knaw.github.io/dd-sword2){:target=_blank}) to
 authenticate users against Dataverse user accounts. This services is basically an extension of the Dataverse API.
 
 Interfaces
