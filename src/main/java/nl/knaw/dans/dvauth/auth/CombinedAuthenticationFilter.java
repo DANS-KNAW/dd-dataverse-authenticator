@@ -49,7 +49,7 @@ public class CombinedAuthenticationFilter<P extends Principal> extends AuthFilte
 
         if (countMethods(principals) > 1) {
             logger.error("Multiple authentication methods used in one request (header and basic)");
-            throw new BadRequestException("Only one of X-Dataverse-Key and Basic Authentication allowed per request");
+            throw new BadRequestException("Only one of X-Dataverse-key and Basic Authentication allowed per request");
         }
 
         if (!authenticate(requestContext, principals, SecurityContext.BASIC_AUTH)) {
