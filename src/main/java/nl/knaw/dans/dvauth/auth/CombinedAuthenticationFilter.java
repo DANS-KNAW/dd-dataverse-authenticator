@@ -62,7 +62,7 @@ public class CombinedAuthenticationFilter<P extends Principal> extends AuthFilte
         var result = new CombinedCredentials();
         var value = requestContext.getHeaders().getFirst(headerName);
 
-        if (value != null) {
+        if (value != null && !value.isBlank()) {
             result.setHeaderCredentials(new HeaderCredentials(value));
         }
 
@@ -109,6 +109,11 @@ public class CombinedAuthenticationFilter<P extends Principal> extends AuthFilte
 
         final String username = decoded.substring(0, i);
         final String password = decoded.substring(i + 1);
+
+        if (password.isBlank()) {
+            return null;
+        }
+
         return new BasicCredentials(username, password);
     }
 
