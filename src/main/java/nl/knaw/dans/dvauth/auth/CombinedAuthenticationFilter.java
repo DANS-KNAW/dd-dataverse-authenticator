@@ -61,8 +61,12 @@ public class CombinedAuthenticationFilter<P extends Principal> extends AuthFilte
         var result = new CombinedCredentials();
         var value = requestContext.getHeaders().getFirst(headerName);
 
-        if (value != null && !value.isBlank()) {
-            result.setHeaderCredentials(new HeaderCredentials(value));
+        if (value != null) {
+            if (value.isBlank()) {
+                logger.warn("Ignoring blank value for header {}. Discarding header auth option.", headerName);
+            } else {
+                result.setHeaderCredentials(new HeaderCredentials(value));
+            }
         }
 
         var basicCredentials = getBasicCredentials(requestContext.getHeaders().getFirst(HttpHeaders.AUTHORIZATION));
@@ -110,6 +114,7 @@ public class CombinedAuthenticationFilter<P extends Principal> extends AuthFilte
         final String password = decoded.substring(i + 1);
 
         if (password.isBlank()) {
+            logger.warn("Ignoring blank password for user {}. Discarding Basic Auth option.", username);
             return null;
         }
 
