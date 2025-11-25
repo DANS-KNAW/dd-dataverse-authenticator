@@ -48,8 +48,7 @@ public class CombinedAuthenticator implements Authenticator<CombinedCredentials,
             results.add(headerResult);
         }
 
-        // no auth provided, this is bad
-        if (results.size() == 0) {
+        if (results.isEmpty()) {
             return Optional.empty();
         }
 
