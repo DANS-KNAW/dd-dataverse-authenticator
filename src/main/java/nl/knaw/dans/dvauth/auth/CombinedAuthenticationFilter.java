@@ -17,8 +17,8 @@ package nl.knaw.dans.dvauth.auth;
 
 import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.basic.BasicCredentials;
-
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import javax.annotation.Priority;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Priorities;
@@ -47,12 +47,11 @@ public class CombinedAuthenticationFilter<P extends Principal> extends AuthFilte
     public void filter(ContainerRequestContext requestContext) throws IOException {
         var principals = getPrincipals(requestContext);
 
-        // only allow a single authentication method
         if (countMethods(principals) > 1) {
+            logger.error("Multiple authentication methods used in one request (header and basic)");
             throw new BadRequestException("Only one of X-Dataverse-Key and Basic Authentication allowed per request");
         }
 
-        // not sure what will break if we put our custom auth method in here, so lets stick with BASIC_AUTH
         if (!authenticate(requestContext, principals, SecurityContext.BASIC_AUTH)) {
             throw unauthorizedHandler.buildException(prefix, realm);
         }
