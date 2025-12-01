@@ -22,8 +22,13 @@ repo_name: DANS-KNAW/dd-dataverse-authenticator
 repo_url: https://github.com/DANS-KNAW/dd-dataverse-authenticator
 
 nav:
-  - Manual: index.md
-  - ⇒ DANS Data Station Architecture: arch.md
+  - Manual:
+      - Description: index.md
+      - Installation: installation.md
+      - Configuration: config.md
+      - Context: context.md
+  - Development:
+      - Overview: dev.md
 
 plugins:
   - markdownextradata
