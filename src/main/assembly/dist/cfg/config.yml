@@ -22,6 +22,8 @@ dataverseDatabase:
   user: dd_dataverse_authenticator
   password: changeme
   url: jdbc:postgresql://localhost:5432/dvndb
+  # N.B. We are logging validation errors, but since connections are validated before being used, automatic recovery
+  # should still work, so don't get spooked by the error messages in the log when postgresql is restarted.
   logValidationErrors: true
   properties:
     charSet: UTF-8
