@@ -30,7 +30,7 @@
 
     <name>DD Dataverse Authenticator</name>
     <description>Service that authenticates Dataverse users using account credentials</description>
-    <url>https://github.com/DANS-KNAW/dd-dataverse-authenticator</url>
+    <url>https://dans-knaw.github.io/dd-dataverse-authenticator</url>
     <inceptionYear>2022</inceptionYear>
 
     <scm>
